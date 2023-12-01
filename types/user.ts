@@ -4,6 +4,7 @@ export interface UserEntity {
     pwdHash: string;
     accountType: string;
     jwtCookie?: string
+    createAccountLink?: string
 }
 
 

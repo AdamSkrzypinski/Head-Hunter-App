@@ -1,10 +1,12 @@
 import {Router} from "express";
 import * as multer from "multer";
-import {rename} from "fs/promises";
+import {readFile, rename} from "fs/promises";
 import {join} from "path";
+import {StudentRecord} from "../records/student.record";
 
 export const studentRouter = Router();
-const upload = multer({dest: "./data/uploads/",
+const upload = multer({
+    dest: "./data/uploads/",
 
 }).single('studentsList')
 
@@ -18,7 +20,9 @@ studentRouter
 
         upload(req, res, async err => {
             if (err instanceof multer.MulterError) {
-                return res.status(400).send({ message: err.message })};
+                return res.status(400).send({message: err.message})
+            }
+            ;
             const {filename, originalname, destination} = req.file;
 
             if (originalname.slice(-4) === 'json') {
@@ -28,8 +32,19 @@ studentRouter
                 );
 
                 const filePath = join(destination, originalname);
+                const studentsList = JSON.parse(await readFile(filePath, 'utf8'))
+                studentsList.map(async (student: StudentRecord) => {
+                    const newStudent = new StudentRecord(student)
+                    console.log(newStudent)
+                    await newStudent.createUser()
+                })
+               const links = await StudentRecord.getAllLinks()
+
                 res.status(201)
-                    .send({message: `Pomyślnie przesłano plik ${originalname}.`})
+                    .send({
+                        message: `Pomyślnie przesłano plik ${originalname}.`,
+                        links
+                    })
 
 
                 res.end();
