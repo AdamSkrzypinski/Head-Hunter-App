@@ -19,6 +19,9 @@ export interface CreateUserResponse {
     userId?: string;
 }
 
+
+
+// https://nuidzruvvg.cfolks.pl/hh/user/login
 export interface UserLogin {
     email: string;
     pwdHash: string;

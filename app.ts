@@ -3,7 +3,7 @@ import * as express from 'express';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '/.env' });
 import { adminRouter } from './routers/admin';
-import { traineeRouter } from './routers/trainee';
+import { studentRouter } from './routers/student';
 import { hrRouter } from './routers/hr';
 import {userRouter} from "./routers/user";
 
@@ -17,7 +17,7 @@ const PORT = process.env.PORT
 app.use(express.json());
 
 app.use('/admin', adminRouter);
-app.use('/trainee', traineeRouter);
+app.use('/hh/student', studentRouter);
 app.use('/hr', hrRouter);
 app.use('/hh/user', userRouter)
 
