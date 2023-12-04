@@ -7,7 +7,7 @@ userRouter
     .post('/register', async (req, res) => {
         if (!req.body.email || !req.body.pwdHash || !req.body.accountType) {
             return res.status(401).json({
-                message: "Nieprawidłowe zapytanie!"
+                message: "Nieprawidłowe żądanie!"
             })
         }
         const newUser = new UserRecord(req.body)
@@ -24,7 +24,7 @@ userRouter
         const loginData = req.body
         if (!loginData.email || !loginData.pwdHash) {
             return res.status(401).json({
-                message: "Nieprawidłowe zapytanie!"
+                message: "Nieprawidłowe żądanie!"
             })
         }
         const loginResponse = await UserRecord.login(loginData.email, loginData.pwdHash)
@@ -55,7 +55,7 @@ userRouter
         const userId = req.body.userId
         if (!userId) {
             return res.status(401).json({
-                message: "Nieprawidłowe zapytanie!"
+                message: "Nieprawidłowe żądanie!"
             })
         }
         const user = await UserRecord.findOne(userId)

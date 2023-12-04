@@ -38,10 +38,11 @@ export class StudentRecord implements StudentEntity {
 
 
         try {
-            await pool.execute('INSERT INTO `accounts` (id, email, createAccountLink) VALUES (:id, :email, :createAccountLink)', {
+            await pool.execute('INSERT INTO `accounts` (id, email, createAccountLink, accountType) VALUES (:id, :email, :createAccountLink, :accountType)', {
                 id: this.id,
                 email: this.email,
-                createAccountLink: `${config.domain}/hh/student/register/${this.id}`
+                createAccountLink: `${config.domain}/hh/student/register/${this.id}`,
+                accountType: 'student'
             })
 
 
@@ -76,7 +77,7 @@ export class StudentRecord implements StudentEntity {
 
     }
 
-    static async getAllUsers() {
+    static async getAllStudents() {
         try {
             const allStudents = await pool.execute('SELECT * from students WHERE status= :status', {
                 status: 'zarejestrowany'
@@ -98,9 +99,13 @@ export class StudentRecord implements StudentEntity {
             const studentToUpdate = await pool.execute('SELECT * FROM students WHERE id = :id', {
                 id: id
             }) as StudentRecordResults
-            return studentToUpdate[0][0]
+            return {
+                isSuccess: true,
+                student: studentToUpdate[0][0]
+            }
         } catch (err) {
             console.log(err)
+            return {isSuccess: false}
         }
     }
 

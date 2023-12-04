@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use('/admin', adminRouter);
 app.use('/hh/student', studentRouter);
-app.use('/hr', hrRouter);
+app.use('/hh/hr', hrRouter);
 app.use('/hh/user', userRouter)
 
 app.listen(3001, function () {

@@ -14,7 +14,7 @@ const upload = multer({
 
 studentRouter
     .get('/', async (req, res) => {
-        const allStudents =  await StudentRecord.getAllUsers()
+        const allStudents =  await StudentRecord.getAllStudents()
         if (allStudents.isSuccess === false) {
             return res.status(401).json({
                 message: `Przepraszamy, coś poszło nie tak, spróbuj ponownie później.`
@@ -24,6 +24,19 @@ studentRouter
         return res.status(200).json({
             studentsList: allStudents.studentsList
         })
+    })
+
+    .get('/:id', async (req, res) => {
+        const {student} = await StudentRecord.getOne(req.params.id)
+        if (!student) {
+            return res.status(401).json({
+                message: `Nie znaleziono użytkownika o podanym ID.`
+            })
+        }
+        return res.status(200).json({
+            student: student
+        })
+
     })
 
     .post('/upload', async (req, res) => {
@@ -92,7 +105,7 @@ studentRouter
             })
         }
         const findRes = await StudentRecord.getOne(id)
-        const studentToUpdate = new StudentRecord(findRes)
+        const studentToUpdate = new StudentRecord(findRes.student)
         if (!studentToUpdate) {
             return res.status(401).json({
                 message: "Nie znaleziono kursanta o podanym ID!"
