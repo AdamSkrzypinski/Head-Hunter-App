@@ -8,7 +8,7 @@ hrRouter
 
     .post('/create', async (req, res) => {
         if (!req.body.email || !req.body.fullName || !req.body.accountType || !req.body.company || !req.body.maxReservedStudents) {
-            return res.status(401).json({
+            return res.status(400).json({
                 message: "Nieprawidłowe żądanie!"
             })
         }
@@ -17,7 +17,7 @@ hrRouter
         const newHrRes = await newHr.create()
 
         if (!newHrRes.id) {
-            return res.status(401).json({
+            return res.status(404).json({
                 message: `Przepraszamy, coś poszło nie tak, spróbuj ponownie później..`
             })
         }

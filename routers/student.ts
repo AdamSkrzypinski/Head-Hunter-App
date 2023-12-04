@@ -16,7 +16,7 @@ studentRouter
     .get('/', async (req, res) => {
         const allStudents =  await StudentRecord.getAllStudents()
         if (allStudents.isSuccess === false) {
-            return res.status(401).json({
+            return res.status(400).json({
                 message: `Przepraszamy, coś poszło nie tak, spróbuj ponownie później.`
             })
         }
@@ -29,7 +29,7 @@ studentRouter
     .get('/:id', async (req, res) => {
         const {student} = await StudentRecord.getOne(req.params.id)
         if (!student) {
-            return res.status(401).json({
+            return res.status(404).json({
                 message: `Nie znaleziono użytkownika o podanym ID.`
             })
         }
@@ -100,20 +100,20 @@ studentRouter
             avatarUrl
         } = updateReq;
         if (!id || !email || !tel || !firstName || !lastName || !githubUsername || !projectUrls || !portfolioUrls || !expectedContractType || !expectedSalary || !canTakeApprenticeship || !monthsOfCommercialExp || !education || !bio || !expectedTypeWork || !targetWorkCity || !workExperience || !courses || !avatarUrl) {
-            return res.status(401).json({
+            return res.status(400).json({
                 message: "Nieprawidłowe zapytanie!"
             })
         }
         const findRes = await StudentRecord.getOne(id)
         const studentToUpdate = new StudentRecord(findRes.student)
         if (!studentToUpdate) {
-            return res.status(401).json({
+            return res.status(404).json({
                 message: "Nie znaleziono kursanta o podanym ID!"
             })
         } else {
             const updateRes = await studentToUpdate.update(updateReq)
             if (updateRes.isSuccess === false) {
-                return res.status(401).json({
+                return res.status(400).json({
                     message: `Przepraszamy, coś poszło nie tak, spróbuj ponownie później..`
                 })
             }
