@@ -4,6 +4,7 @@ import {readFile, rename} from "fs/promises";
 import {join} from "path";
 import {StudentRecord} from "../records/student.record";
 import {UpdateStudentReq} from "../types/student";
+import {uploadedStudentValidation, ValidationRecord} from "../utils/uploadedStudentValidation";
 
 export const studentRouter = Router();
 const upload = multer({
@@ -14,7 +15,7 @@ const upload = multer({
 
 studentRouter
     .get('/', async (req, res) => {
-        const allStudents =  await StudentRecord.getAllStudents()
+        const allStudents = await StudentRecord.getAllStudents()
         if (allStudents.isSuccess === false) {
             return res.status(400).json({
                 message: `Przepraszamy, coś poszło nie tak, spróbuj ponownie później.`
@@ -47,6 +48,7 @@ studentRouter
             ;
             const {filename, originalname, destination} = req.file;
 
+
             if (originalname.slice(-4) === 'json') {
                 await rename(
                     `./data/uploads/${filename}`,
@@ -55,23 +57,32 @@ studentRouter
 
                 const filePath = join(destination, originalname);
                 const studentsList = JSON.parse(await readFile(filePath, 'utf8'))
-                studentsList.map(async (student: StudentRecord) => {
+
+                const validation = studentsList.map(async (student: StudentRecord, index: number) => {
                     const newStudent = new StudentRecord(student)
-                    console.log(newStudent)
-                    await newStudent.create()
+                    const validationResult = await uploadedStudentValidation(newStudent, index)
+
+
+                    if (validationResult.status === 'ok') {
+                        await newStudent.create()
+                    }
+
+                    return validationResult
+
                 })
-                const links = await StudentRecord.getAllLinks()
+
 
                 res.status(201)
                     .send({
                         message: `Pomyślnie przesłano plik ${originalname}.`,
-                        links
+                        validationInfo: await Promise.all(await validation)
                     })
 
             } else {
                 res.status(400)
                 res.send({error: "To nie jest prawidłowy plik .json!"})
             }
+
         })
 
     })

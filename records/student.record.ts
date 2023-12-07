@@ -69,7 +69,7 @@ export class StudentRecord implements StudentEntity {
     static async getAllLinks() {
 
         try {
-            const links = await pool.execute('SELECT createAccountLink, email FROM accounts WHERE createAccountLink IS NOT NULL')
+            const links = await pool.execute('SELECT createAccountLink, email FROM accounts WHERE createAccountLink IS NOT NULL AND createAccountLink != "zarejestrowany" AND accountType != "hr" AND accountType != "admin"')
             return links[0]
         } catch (err) {
             console.log(err)
