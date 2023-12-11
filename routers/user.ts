@@ -5,7 +5,7 @@ export const userRouter = Router()
 
 userRouter
     .post('/register', async (req, res) => {
-        if (!req.body.email || !req.body.pwdHash || !req.body.accountType) {
+        if (!req.body.email || !req.body.pwdHash || !req.body.accountType || req.body.accountType === 'admin') {
             return res.status(400).json({
                 message: "Nieprawidłowe żądanie!"
             })

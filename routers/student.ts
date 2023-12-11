@@ -88,6 +88,7 @@ studentRouter
     })
 
     .patch('/update', async (req, res) => {
+        console.log(req.body)
         const updateReq = req.body as UpdateStudentReq
         const {
             id,
@@ -116,12 +117,12 @@ studentRouter
             })
         }
         const findRes = await StudentRecord.getOne(id)
-        const studentToUpdate = new StudentRecord(findRes.student)
-        if (!studentToUpdate) {
+        if (findRes.isSuccess === false) {
             return res.status(404).json({
                 message: "Nie znaleziono kursanta o podanym ID!"
             })
         } else {
+            const studentToUpdate = new StudentRecord(findRes.student)
             const updateRes = await studentToUpdate.update(updateReq)
             if (updateRes.isSuccess === false) {
                 return res.status(400).json({

@@ -11,7 +11,7 @@ export interface ValidationRecord  {
 export const uploadedStudentValidation = async (student: StudentRecord, index: number) => {
     if (!student.email || !student.accountType || !student.courseCompletion || !student.courseEngagment || !student.projectDegree || !student.teamProjectDegree || !student.bonusProjectUrls) {
         return {
-            message: `Pozycja ${index + 1} nie przeszła walidacji, brak wszystkich danych.`,
+            message: `Pozycja ${index + 1} (${student.email})nie przeszła walidacji, brak wszystkich danych.`,
             status: 'error'
         }
     }
@@ -25,7 +25,14 @@ export const uploadedStudentValidation = async (student: StudentRecord, index: n
 
     if (emailCheck[0].length !== 0) {
         return {
-            message: `Pozycja ${index + 1} nie przeszła walidacji, podany adres email jest juz w systemie.`,
+            message: `Pozycja ${index + 1} (${email}) nie przeszła walidacji, podany adres email jest juz w systemie.`,
+            status: 'error'
+        }
+    }
+
+    if (!(email.includes('@'))){
+        return {
+            message: `Pozycja ${index + 1} (${email}) nie przeszła walidacji, podany adres email jest niepoprawny.`,
             status: 'error'
         }
     }

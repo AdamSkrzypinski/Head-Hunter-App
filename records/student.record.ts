@@ -99,6 +99,10 @@ export class StudentRecord implements StudentEntity {
             const studentToUpdate = await pool.execute('SELECT * FROM students WHERE id = :id', {
                 id: id
             }) as StudentRecordResults
+            if(studentToUpdate[0].length === 0){
+                return {isSuccess: false}
+
+            }
             return {
                 isSuccess: true,
                 student: studentToUpdate[0][0]
@@ -110,7 +114,6 @@ export class StudentRecord implements StudentEntity {
     }
 
     async update(req: UpdateStudentReq) {
-        console.log(req)
         try {
             await pool.execute('UPDATE `students` SET `email`= :email, `tel`= :tel, `firstName` = :firstName, `lastName`= :lastName, `githubUsername`= :githubUsername, `portfolioUrls`= :portfolioUrls, `projectUrls`=:portfolioUrls, `bio`= :bio, `expectedTypeWork`= :expectedTypeWork, `targetWorkCity`= :targetWorkCity, `expectedContractType`= :expectedContractType, `expectedSalary`= :expectedSalary, `canTakeApprenticeship`= :canTakeApprenticeship, `monthsOfCommercialExp`= :monthsOfCommercialExp, `education`= :education, `workExperience`= :workExperience, `courses` = :courses, `avatarUrl`= :avatarUrl, `status`= :status WHERE `id` = :id', {
                 id: req.id,
@@ -143,9 +146,10 @@ export class StudentRecord implements StudentEntity {
                 })
             }
 
-            await pool.execute('UPDATE `accounts` SET `createAccountLink` = :status WHERE `id` = :id', {
+            await pool.execute('UPDATE `accounts` SET `createAccountLink` = :status, `email` = :email WHERE `id` = :id', {
                 id: req.id,
-                status: 'zarejestrowany'
+                status: 'zarejestrowany',
+                email: req.email
             })
 
             return {isSuccess: true}

@@ -32,7 +32,6 @@ export interface StudentEntity{
 // https://nuidzruvvg.cfolks.pl/hh/student/upload
 export interface CreateStudentReq {
     email: string;
-    accountType: string;
     courseCompletion: number;
     courseEngagment: number;
     projectDegree: number;

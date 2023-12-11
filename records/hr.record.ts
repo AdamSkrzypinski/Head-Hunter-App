@@ -16,7 +16,6 @@ export class HrRecord implements HrEntity{
         this.id = obj.id;
         this.email = obj.email;
         this.pwdHash = obj.pwdHash
-        this.accountType = obj.accountType
         this.company = obj.company;
         this.fullName = obj.fullName;
         this.maxReservedStudents = obj.maxReservedStudents;
@@ -31,7 +30,7 @@ export class HrRecord implements HrEntity{
                 id: this.id,
                 email: this.email,
                 createAccountLink: `${config.domain}/hh/hr/register/${this.id}`,
-                accountType: this.accountType
+                accountType: 'hr'
             })
 
             await pool.execute('INSERT INTO `hr` (id, email,fullName, company, maxReservedStudents) VALUES (:id, :email, :fullName, :company, :maxReservedStudents)', {
