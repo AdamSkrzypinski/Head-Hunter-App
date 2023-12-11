@@ -4,7 +4,9 @@ import {readFile, rename} from "fs/promises";
 import {join} from "path";
 import {StudentRecord} from "../records/student.record";
 import {UpdateStudentReq} from "../types/student";
-import {uploadedStudentValidation, ValidationRecord} from "../utils/uploadedStudentValidation";
+import {uploadedStudentValidation} from "../utils/uploadedStudentValidation";
+import {authUtils} from "../utils/auth";
+
 
 export const studentRouter = Router();
 const upload = multer({
@@ -46,6 +48,14 @@ studentRouter
                 return res.status(400).send({message: err.message})
             }
             ;
+
+
+            const auth = authUtils(req.headers.cookie);
+            if(auth.status === 'admin'){
+                res.status(403)
+                res.send({error: "Brak dostępu!"})
+            }
+
             const {filename, originalname, destination} = req.file;
 
 
