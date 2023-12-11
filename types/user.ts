@@ -4,6 +4,7 @@ export interface UserEntity {
     pwdHash: string;
     accountType: string;
     jwtCookie?: string
+    createAccountLink?: string
 }
 
 
@@ -19,6 +20,9 @@ export interface CreateUserResponse {
     userId?: string;
 }
 
+
+
+// https://nuidzruvvg.cfolks.pl/hh/user/login
 export interface UserLogin {
     email: string;
     pwdHash: string;
