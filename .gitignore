@@ -39,3 +39,6 @@ lerna-debug.log*
 .env
 .env.test
 /config/config.ts
+/data/uploads
+test.json
+

@@ -14,12 +14,14 @@ export class UserRecord implements UserEntity {
     public email: string;
     public pwdHash: string;
     public accountType: string;
+    public createAccountLink: string;
 
     constructor(obj: UserRecord) {
         this.id = obj.id;
         this.email = obj.email;
         this.pwdHash = createHash(obj.pwdHash);
         this.accountType = obj.accountType;
+        this.createAccountLink = obj.createAccountLink;
     }
 
     async register() {
